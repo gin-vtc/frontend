@@ -6,9 +6,8 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(BootstrapVue)
-
 Vue.config.productionTip = false
-
+window.apiBase = "http://localhost:3000"
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

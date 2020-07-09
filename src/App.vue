@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <div class="row">
-      <div class="col">123</div>
-      <div class="col">234</div>
+    <div v-if="!login">
+      <Login/>
+    </div>
+    <div v-else>
+
     </div>
     <!--    <img src="./assets/logo.png">-->
     <!--    <HelloWorld/>-->
@@ -10,21 +12,23 @@
 </template>
 
 <script>
-    import HelloWorld from './components/HelloWorld'
+    import Login from './components/Login'
     import Cookies from 'js-cookie'
 
     export default {
         name: 'App',
         components: {
-            HelloWorld
+            Login
         },
-        data: {
-            login: false,
-            id: null
+        data: function () {
+            return {
+                login: false,
+                id: null
+            }
         },
         mounted() {
             // Check Login
-            const id = cookies.get("id")
+            const id = Cookies.get("id")
             if (id) {
                 this.login = true
                 this.id = id
