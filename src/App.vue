@@ -4,7 +4,27 @@
       <Login/>
     </div>
     <div v-else>
+      <div class="row">
+        <div class="col">
+          <div class="btn btn-primary" @click="newStatusBlock = !newStatusBlock">New Status</div>
+        </div>
 
+        <div class="col">
+          <div class="btn btn-warning" @click="changePwdBlock = !changePwdBlock">Change Password</div>
+        </div>
+
+        <div class="col" @click="">
+          <div class="btn btn-danger">Logout</div>
+        </div>
+      </div>
+      <hr />
+      <div v-if="newStatusBlock">
+        New Status
+      </div>
+      <div v-if="changePwdBlock">
+        Change Pwd
+      </div>
+      <Status/>
     </div>
     <!--    <img src="./assets/logo.png">-->
     <!--    <HelloWorld/>-->
@@ -13,17 +33,21 @@
 
 <script>
     import Login from './components/Login'
+    import Status from './components/Status'
     import Cookies from 'js-cookie'
 
     export default {
         name: 'App',
         components: {
-            Login
+            Login,
+            Status
         },
         data: function () {
             return {
                 login: false,
-                id: null
+                id: null,
+                newStatusBlock:false,
+                changePwdBlock:false
             }
         },
         mounted() {
