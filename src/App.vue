@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" class="fade" :class="{'show':health}">
     <div v-if="!login">
-      <Login />
+      <Login/>
     </div>
     <div v-else>
       <div class="row">
@@ -23,18 +23,18 @@
           </div>
         </div>
 
-        <div class="col" @click="">
+        <div class="col" @click="logout">
           <div class="btn btn-danger">Logout</div>
         </div>
       </div>
-      <hr />
+      <hr/>
       <div v-if="newStatusBlock">
-        <NewStatus />
+        <NewStatus/>
       </div>
       <div v-if="changePwdBlock">
-        Change Pwd
+        <ChangePWD />
       </div>
-      <Status />
+      <Status/>
     </div>
     <!--    <img src="./assets/logo.png">-->
     <!--    <HelloWorld/>-->
@@ -42,44 +42,63 @@
 </template>
 
 <script>
-import Login from "./components/Login";
-import Status from "./components/Status";
-import NewStatus from "./components/NewStatus";
-import Cookies from "js-cookie";
+    import Login from "./components/Login";
+    import Status from "./components/Status";
+    import NewStatus from "./components/NewStatus";
+    import ChangePWD from "./components/ChangePWD";
+    import Cookies from "js-cookie";
+    import axios from 'axios'
 
-export default {
-  name: "App",
-  components: {
-    Login,
-    Status,
-    NewStatus
-  },
-  data: function() {
-    return {
-      login: false,
-      id: null,
-      newStatusBlock: false,
-      changePwdBlock: false
+    export default {
+        name: "App",
+        components: {
+            Login,
+            Status,
+            NewStatus,
+            ChangePWD
+        },
+        data: function () {
+            return {
+                login: false,
+                id: null,
+                newStatusBlock: false,
+                changePwdBlock: false,
+                health:false
+            };
+        },
+        mounted() {
+            // Check Login
+            const vm = this
+            const id = Cookies.get("id");
+            if (id) {
+                this.login = true;
+                this.id = id;
+            }
+
+            axios.get(window.apiBase+'/').then(r=>{
+                vm.health = true
+            }).catch(function (error) {
+               window.alert("API Error")
+            })
+        },
+        methods: {
+            logout: () => {
+                document.cookie.split(";").forEach(function (c) {
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                });
+                window.location.reload()
+            }
+        }
     };
-  },
-  mounted() {
-    // Check Login
-    const id = Cookies.get("id");
-    if (id) {
-      this.login = true;
-      this.id = id;
-    }
-  }
-};
 </script>
 
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
 </style>
